@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -46,11 +48,29 @@ public class TodoController {
 	    return todoService.getTodoById(todoNo, memberId);
 	}
 	
+	//todo 수정
 	@PutMapping("/todos/{todoNo}")
 	public ResponseEntity<ApiResponse> updateTodo( @PathVariable String todoNo, @RequestBody TodoDTO dto, Authentication authentication
 	) {
 	    String memberId = authentication.getName();
 	    return todoService.updateTodo(todoNo, memberId, dto);
+	}
+
+	//todo 삭제
+	@DeleteMapping("/todos/{todoNo}")
+	public ResponseEntity<ApiResponse> deleteTodo( @PathVariable String todoNo, Authentication authentication
+	) {
+	    String memberId = authentication.getName();
+	    return todoService.deleteTodo(todoNo, memberId);
+	}
+
+	//todo 조건 조회
+	@GetMapping("/todos/search")
+	public ResponseEntity<List<Todo>> searchTodos(@ModelAttribute TodoDTO searchDTO,
+	        Authentication authentication
+	) {
+	    String memberId = authentication.getName();
+	    return todoService.searchTodos(memberId, searchDTO);
 	}
 
 

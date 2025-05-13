@@ -57,6 +57,33 @@
 	    WHERE todo_no = #{todoNo}
 	    AND member_no = #{memberNo}
 	</update>
+	
+	<delete id="deleteTodo">
+	    DELETE FROM TB_TODO
+	    WHERE todo_no = #{todoNo}
+	    AND member_no = #{memberNo}
+	</delete>
+	
+	<select id="searchByConditions" resultType="com.aladin.todo.entity.Todo">
+	    SELECT
+	        <include refid="todoColumns"/>
+	    FROM TB_TODO
+	    WHERE member_no = #{memberNo}
+	    
+		<if test="dto.todoTitle != null and dto.todoTitle != ''">
+		    AND todo_title LIKE '%' || #{dto.todoTitle} || '%'
+		</if>
+		
+		<if test="dto.todoContent != null and dto.todoContent != ''">
+		    AND todo_content LIKE '%' || #{dto.todoContent} || '%'
+		</if>
+	    
+	    <if test="dto.completed != null">
+	        AND completed = #{dto.completed}
+	    </if>
+	    
+	    ORDER BY inst_dtm DESC
+	</select>
 
 	
 </mapper>

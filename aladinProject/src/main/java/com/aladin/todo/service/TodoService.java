@@ -62,8 +62,7 @@ public class TodoService {
 	public ResponseEntity<List<Todo>> getTodosByMember(String memberId) {
 
 		try {
-			Member member = userService.findMemberOrThrow(memberId);
-			String memberNo = member.getMemberNo();
+			String memberNo = getMemberNoOrThrow(memberId);
 			
 			List<Todo> todoList = todoMapper.findByMemberNo(memberNo);
 	
@@ -79,8 +78,8 @@ public class TodoService {
 	@Transactional
 	public ResponseEntity<ApiResponse> getTodoById(String todoNo, String memberId) {
 	    try {
-	        Member member = userService.findMemberOrThrow(memberId);
-	        String memberNo = member.getMemberNo();
+	    	String memberNo = getMemberNoOrThrow(memberId);
+
 
 	        Todo todo = todoMapper.findByTodoNoAndMemberNo(todoNo, memberNo);
 	        if (todo == null) {
@@ -99,8 +98,7 @@ public class TodoService {
 	@Transactional
 	public ResponseEntity<ApiResponse> updateTodo(String todoNo, String memberId, TodoDTO dto) {
 	    try {
-	        Member member = userService.findMemberOrThrow(memberId);
-	        String memberNo = member.getMemberNo();
+	    	String memberNo = getMemberNoOrThrow(memberId);
 
 	        Todo todo = findTodoOrThrow(todoNo, memberNo);
 
@@ -117,6 +115,38 @@ public class TodoService {
 	                .body(new ApiResponse(400, e.getMessage()));
 	    }
 	}
+	
+	//삭제
+	@Transactional
+	public ResponseEntity<ApiResponse> deleteTodo(String todoNo, String memberId) {
+	    try {
+	    	String memberNo = getMemberNoOrThrow(memberId);
+
+	        Todo todo = findTodoOrThrow(todoNo, memberNo);
+
+	        todoMapper.deleteTodo(todoNo, memberNo);
+
+	        return ResponseEntity.ok(new ApiResponse(200, "TODO가 성공적으로 삭제되었습니다."));
+	    } catch (IllegalArgumentException e) {
+	        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                .body(new ApiResponse(400, e.getMessage()));
+	    }
+	}
+	
+	//조건조회
+	@Transactional
+	public ResponseEntity<List<Todo>> searchTodos(String memberId, TodoDTO dto) {
+	    Member member = userService.findMemberOrThrow(memberId);
+	    String memberNo = member.getMemberNo();
+
+	    List<Todo> todoList = todoMapper.searchByConditions(memberNo, dto);
+	    return ResponseEntity.ok(todoList);
+	}
+
+	
+	private String getMemberNoOrThrow(String memberId) {
+	    return userService.findMemberOrThrow(memberId).getMemberNo();
+	}
 
 	private Todo findTodoOrThrow(String todoNo, String memberNo) {
 	    Todo todo = todoMapper.findByTodoNoAndMemberNo(todoNo, memberNo);
@@ -125,10 +155,7 @@ public class TodoService {
 	    }
 	    return todo;
 	}
-
 	
-	
-
 	private void validateUserExistence(String memberId) {
 	    int count = userMapper.countByMemberId(memberId);
 	    if (count != 1) {
