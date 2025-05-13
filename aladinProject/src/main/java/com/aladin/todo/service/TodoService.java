@@ -95,6 +95,37 @@ public class TodoService {
 	    }
 	}
 
+	//수정
+	@Transactional
+	public ResponseEntity<ApiResponse> updateTodo(String todoNo, String memberId, TodoDTO dto) {
+	    try {
+	        Member member = userService.findMemberOrThrow(memberId);
+	        String memberNo = member.getMemberNo();
+
+	        Todo todo = findTodoOrThrow(todoNo, memberNo);
+
+	        applyTodoUpdates(todo, dto);
+
+	        todo.setUpdateDtm(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+	        todoValidator.validateUpdateTodo(dto);
+	        todoMapper.updateTodo(todo);
+
+	        return ResponseEntity.ok(new ApiResponse(200, "TODO가 성공적으로 수정되었습니다."));
+
+	    } catch (IllegalArgumentException e) {
+	        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                .body(new ApiResponse(400, e.getMessage()));
+	    }
+	}
+
+	private Todo findTodoOrThrow(String todoNo, String memberNo) {
+	    Todo todo = todoMapper.findByTodoNoAndMemberNo(todoNo, memberNo);
+	    if (todo == null) {
+	        throw new IllegalArgumentException("해당 TODO를 찾을 수 없습니다.");
+	    }
+	    return todo;
+	}
+
 	
 	
 
@@ -123,6 +154,19 @@ public class TodoService {
 	    return userMapper.findByMemberId(memberId);
 	}
 
+	private void applyTodoUpdates(Todo todo, TodoDTO dto) {
+        if (dto.getTodoTitle() != null) {
+            todo.setTodoTitle(dto.getTodoTitle());
+        }
+
+        if (dto.getTodoContent() != null) {
+            todo.setTodoContent(dto.getTodoContent());
+        }
+
+        if (dto.getCompleted() != null) {
+            todo.setCompleted(dto.getCompleted());
+        }
+	}
 
 
 	

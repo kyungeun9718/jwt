@@ -14,4 +14,6 @@ public interface TodoMapper {
 	List<Todo> findByMemberNo(String memberNo);
 
 	Todo findByTodoNoAndMemberNo(String todoNo, String memberNo);
+
+	void updateTodo(Todo todo);
 }

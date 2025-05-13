@@ -47,5 +47,16 @@
 	      AND member_no = #{memberNo}
 	</select>
 
+	<update id="updateTodo" parameterType="com.aladin.todo.entity.Todo">
+	    UPDATE TB_TODO
+	    SET
+	        todo_title = #{todoTitle},
+	        todo_content = #{todoContent},
+	        completed = #{completed},
+	        update_dtm = #{updateDtm}
+	    WHERE todo_no = #{todoNo}
+	    AND member_no = #{memberNo}
+	</update>
+
 	
 </mapper>

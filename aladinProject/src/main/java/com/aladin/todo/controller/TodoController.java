@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -44,6 +45,14 @@ public class TodoController {
 	    String memberId = authentication.getName();
 	    return todoService.getTodoById(todoNo, memberId);
 	}
+	
+	@PutMapping("/todos/{todoNo}")
+	public ResponseEntity<ApiResponse> updateTodo( @PathVariable String todoNo, @RequestBody TodoDTO dto, Authentication authentication
+	) {
+	    String memberId = authentication.getName();
+	    return todoService.updateTodo(todoNo, memberId, dto);
+	}
+
 
 
 }
