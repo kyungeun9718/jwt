@@ -72,6 +72,24 @@ public class UserService {
 	    }
 	}
 	
+	//내정보 수정
+	@Transactional
+	public ResponseEntity<ApiResponse> updateMyInfo(String memberId, UserDTO dto) {
+	    try {
+	    	userValidator.validateUpdate(dto);
+	    	
+	        Member member = findMemberOrThrow(memberId);
+	        applyUpdateToMember(member, dto);
+	        userMapper.update(member);
+	        return ResponseEntity.ok(new ApiResponse(200, "회원 정보가 수정되었습니다."));
+	    } catch (IllegalArgumentException e) {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+	                .body(new ApiResponse(404, e.getMessage()));
+	    }
+	}
+
+
+	
 	//회원가입 validation 확인
 	private void validateUserSignupRequest(UserDTO userDto) {
 	    userValidator.validateSignup(userDto);
@@ -114,6 +132,7 @@ public class UserService {
         return now + random;
     }
     
+    //회원 확인
     private Member findMemberOrThrow(String memberId) {
         Member member = userMapper.findByMemberId(memberId);
         if (member == null) {
@@ -132,6 +151,17 @@ public class UserService {
         return jwtTokenProvider.createToken(memberId);
     }
 
+    //내정보 수정 > 이름, 비밀번호
+    private void applyUpdateToMember(Member member, UserDTO dto) {
+        if (dto.getMemberName() != null) {
+            member.setMemberName(dto.getMemberName());
+        }
+
+        if (dto.getMemberPw() != null && !dto.getMemberPw().isBlank()) {
+            String encrypted = passwordEncoder.encode(dto.getMemberPw());
+            member.setMemberPw(encrypted);
+        }
+    }
 
 
 }

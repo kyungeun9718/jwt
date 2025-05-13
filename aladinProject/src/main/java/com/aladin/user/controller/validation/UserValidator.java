@@ -22,4 +22,16 @@ public class UserValidator {
         }
 
     }
+    
+    public void validateUpdate(UserDTO dto) {
+        if (dto.getMemberName() == null || dto.getMemberName().isBlank()) {
+            throw new IllegalArgumentException("이름은 필수입니다.");
+        }
+
+        if (dto.getMemberPw() == null || dto.getMemberPw().isBlank()) {
+            throw new IllegalArgumentException("비밀번호는 필수입니다.");
+        }
+    }
 }
+
+

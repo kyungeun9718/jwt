@@ -42,4 +42,12 @@
         WHERE member_id = #{memberId}
     </select>
 
+	<update id="update" parameterType="com.aladin.user.entity.Member">
+	    UPDATE TB_MEMBER
+	    SET
+	        member_name = #{memberName},
+	        member_pw = #{memberPw}
+	    WHERE member_id = #{memberId}
+	</update>
+
 </mapper>

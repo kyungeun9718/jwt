@@ -18,4 +18,6 @@ public interface UserMapper {
 	void insert(UserDTO userDto);
 
 	Member findByMemberId(String memberId);
+
+	void update(Member member);
 }

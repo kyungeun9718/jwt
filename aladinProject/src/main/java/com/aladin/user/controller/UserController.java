@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,6 +41,16 @@ public class UserController {
 	public ResponseEntity<ApiResponse> getMyInfo(Authentication authentication) {
 	    String memberId = authentication.getName();
 	    return ResponseEntity.ok(new ApiResponse(200, memberId + " 님"));
+	}
+
+	//내정보수정
+	@PutMapping("/me")
+	public ResponseEntity<ApiResponse> updateMyInfo(
+	        @RequestBody UserDTO userDto,
+	        Authentication authentication
+	) {
+	    String memberId = authentication.getName(); // 로그인된 사용자 ID
+	    return userService.updateMyInfo(memberId, userDto);
 	}
 
 
