@@ -9,15 +9,15 @@ import com.aladin.user.entity.Member;
 @Mapper
 public interface UserMapper {
 
-	//회원번호 중복 확인
     String findByMemberNoForUpdate(@Param("memberNo") String memberNo);
 
     int countByMemberId(String memberId);
-
 
 	void insert(UserDTO userDto);
 
 	Member findByMemberId(String memberId);
 
 	void update(Member member);
+
+	void deleteByMemberId(String memberId);
 }

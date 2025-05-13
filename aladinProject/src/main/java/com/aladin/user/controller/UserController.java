@@ -2,6 +2,7 @@ package com.aladin.user.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -49,8 +50,15 @@ public class UserController {
 	        @RequestBody UserDTO userDto,
 	        Authentication authentication
 	) {
-	    String memberId = authentication.getName(); // 로그인된 사용자 ID
+	    String memberId = authentication.getName();
 	    return userService.updateMyInfo(memberId, userDto);
+	}
+
+	//회원탈퇴
+	@DeleteMapping("/me")
+	public ResponseEntity<ApiResponse> deleteMyAccount(Authentication authentication) {
+	    String memberId = authentication.getName();
+	    return userService.deleteMyAccount(memberId);
 	}
 
 

@@ -12,9 +12,9 @@
     </select>
 
     <select id="countByMemberId" resultType="int">
-    SELECT COUNT(*) 
-    FROM TB_MEMBER 
-    WHERE member_id = #{memberId}
+	    SELECT COUNT(*) 
+	    FROM TB_MEMBER 
+	    WHERE member_id = #{memberId}
 	</select>
 
     
@@ -49,5 +49,11 @@
 	        member_pw = #{memberPw}
 	    WHERE member_id = #{memberId}
 	</update>
+	
+	<delete id="deleteByMemberId">
+	    DELETE FROM TB_MEMBER
+	    WHERE member_id = #{memberId}
+	</delete>
+	
 
 </mapper>

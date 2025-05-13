@@ -87,6 +87,17 @@ public class UserService {
 	                .body(new ApiResponse(404, e.getMessage()));
 	    }
 	}
+	
+	//회원 탈퇴
+	@Transactional
+	public ResponseEntity<ApiResponse> deleteMyAccount(String memberId) {
+		Member member = findMemberOrThrow(memberId);
+		 
+	    userMapper.deleteByMemberId(memberId);
+
+	    return ResponseEntity.ok(new ApiResponse(200, "회원 탈퇴가 완료되었습니다."));
+	}
+
 
 
 	
