@@ -8,8 +8,10 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import com.db.SQLiteManager;
 
 @SpringBootApplication()
-//@SpringBootApplication(exclude={DataSourceAutoConfiguration.class})
-@MapperScan("com.aladin.user.mapper")
+@MapperScan(basePackages = {
+	    "com.aladin.user.mapper",
+	    "com.aladin.todo.mapper"
+	})
 public class AladinProjectApplication {
 
 	public static void main(String[] args) {

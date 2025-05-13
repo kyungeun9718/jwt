@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.aladin.common.dto.ApiResponse;
 import com.aladin.common.config.PasswordEncoderConfig;
-import com.aladin.user.controller.validation.UserValidator;
+import com.aladin.user.validation.UserValidator;
 import com.aladin.user.dto.LoginRequestDTO;
 import com.aladin.user.dto.LoginResponseDTO;
 import com.aladin.user.dto.UserDTO;
@@ -144,7 +144,7 @@ public class UserService {
     }
     
     //회원 확인
-    private Member findMemberOrThrow(String memberId) {
+    public Member findMemberOrThrow(String memberId) {
         Member member = userMapper.findByMemberId(memberId);
         if (member == null) {
             throw new IllegalArgumentException("존재하지 않는 회원입니다.");

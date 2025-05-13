@@ -1,4 +1,4 @@
-package com.aladin.user.controller.validation;
+package com.aladin.user.validation;
 
 import org.springframework.stereotype.Component;
 

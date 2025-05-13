@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.aladin.todo.mapper.TodoMapper">
+	<insert id="insert" parameterType="com.aladin.todo.entity.Todo">
+	    INSERT INTO TB_TODO (
+	        todo_no,
+	        member_no,
+	        todo_title,
+	        todo_content,
+	        completed,
+	        inst_dtm
+	    ) VALUES (
+	        #{todoNo},
+	        #{memberNo},
+	        #{todoTitle},
+	        #{todoContent},
+	        #{completed},
+	        #{instDtm}
+	    )
+	</insert>
+	<select id="findByMemberNo" resultType="com.aladin.todo.entity.Todo">
+    SELECT
+        todo_no,
+        member_no,
+        todo_title,
+        todo_content,
+        CASE WHEN completed = 1 THEN '완료'
+      	     ELSE '미완료'
+        END AS completed,
+        inst_dtm,
+        update_dtm
+    FROM TB_TODO
+    WHERE member_no = #{memberNo}
+    ORDER BY inst_dtm DESC
+</select>
+	
+</mapper>
