@@ -12,9 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.aladin.common.dto.ApiResponse;
 import com.aladin.common.config.PasswordEncoderConfig;
 import com.aladin.user.controller.validation.UserValidator;
+import com.aladin.user.dto.LoginRequestDTO;
+import com.aladin.user.dto.LoginResponseDTO;
 import com.aladin.user.dto.UserDTO;
 import com.aladin.user.mapper.UserMapper;
 import com.aladin.user.entity.Member;
+import com.aladin.common.jwt.JwtTokenProvider;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,6 +27,7 @@ public class UserService {
 	private final UserMapper userMapper;
 	private final UserValidator userValidator;
 	private final BCryptPasswordEncoder passwordEncoder;
+	private final JwtTokenProvider jwtTokenProvider;
 
 
 	//회원가입
@@ -51,6 +55,21 @@ public class UserService {
 	                .body(new ApiResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),"서버 오류가 발생했습니다."));
 	    }
 		
+	}
+	
+	//로그인
+	@Transactional
+	public ResponseEntity<ApiResponse> login(LoginRequestDTO loginDto) {
+	    try {
+	        Member member = findMemberOrThrow(loginDto.getMemberId());
+	        validatePassword(loginDto.getMemberPw(), member.getMemberPw());
+	        String token = generateAccessToken(member.getMemberId());
+	        return ResponseEntity.ok(new ApiResponse(200, token));
+	    } catch (IllegalArgumentException e) {
+	        return ResponseEntity
+	                .status(HttpStatus.UNAUTHORIZED)
+	                .body(new ApiResponse(HttpStatus.UNAUTHORIZED.value(), "로그인 실패: " + e.getMessage()));
+	    }
 	}
 	
 	//회원가입 validation 확인
@@ -94,6 +113,25 @@ public class UserService {
         String random = String.format("%05d", (int)(Math.random() * 100000));
         return now + random;
     }
+    
+    private Member findMemberOrThrow(String memberId) {
+        Member member = userMapper.findByMemberId(memberId);
+        if (member == null) {
+            throw new IllegalArgumentException("존재하지 않는 회원입니다.");
+        }
+        return member;
+    }
+
+    private void validatePassword(String rawPw, String encodedPw) {
+        if (!passwordEncoder.matches(rawPw, encodedPw)) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+    }
+
+    private String generateAccessToken(String memberId) {
+        return jwtTokenProvider.createToken(memberId);
+    }
+
 
 
 }

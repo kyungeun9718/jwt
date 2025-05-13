@@ -31,4 +31,15 @@
             #{memberName}
         )
     </insert>
+
+    <select id="findByMemberId" resultType="com.aladin.user.entity.Member">
+        SELECT
+            member_no,
+            member_name,
+            member_id,
+            member_pw
+        FROM TB_MEMBER
+        WHERE member_id = #{memberId}
+    </select>
+
 </mapper>
