@@ -9,6 +9,7 @@ public class Todo {
     private String todoTitle;
     private String todoContent;
     private Integer completed = 0; //0이면 미완료 1이면 완
+    private String completedStatus;
     private String instDtm;
     private String updateDtm;
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,6 +36,13 @@ public class TodoController {
 	public ResponseEntity<List<Todo>> getTodoList(Authentication authentication) {
 	    String memberId = authentication.getName(); // JWT로부터 memberId 추출
 	    return todoService.getTodosByMember(memberId);
+	}
+
+	//todo 단건 조회
+	@GetMapping("/todos/{todoNo}")
+	public ResponseEntity<ApiResponse> getTodoById(@PathVariable String todoNo, Authentication authentication) {
+	    String memberId = authentication.getName();
+	    return todoService.getTodoById(todoNo, memberId);
 	}
 
 

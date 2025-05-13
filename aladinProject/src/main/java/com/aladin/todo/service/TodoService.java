@@ -61,19 +61,42 @@ public class TodoService {
 	//조회
 	public ResponseEntity<List<Todo>> getTodosByMember(String memberId) {
 
-	try {
-		Member member = userService.findMemberOrThrow(memberId);
-		String memberNo = member.getMemberNo();
-		
-		List<Todo> todoList = todoMapper.findByMemberNo(memberNo);
-
-        return ResponseEntity.ok(todoList);
-		
-    } catch (IllegalArgumentException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.emptyList());
-   
-    }
+		try {
+			Member member = userService.findMemberOrThrow(memberId);
+			String memberNo = member.getMemberNo();
+			
+			List<Todo> todoList = todoMapper.findByMemberNo(memberNo);
+	
+	        return ResponseEntity.ok(todoList);
+			
+	    } catch (IllegalArgumentException e) {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.emptyList());
+	   
+	    }
 	}
+	
+	//단건 조회
+	@Transactional
+	public ResponseEntity<ApiResponse> getTodoById(String todoNo, String memberId) {
+	    try {
+	        Member member = userService.findMemberOrThrow(memberId);
+	        String memberNo = member.getMemberNo();
+
+	        Todo todo = todoMapper.findByTodoNoAndMemberNo(todoNo, memberNo);
+	        if (todo == null) {
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+	                    .body(new ApiResponse(404, "해당 TODO를 찾을 수 없습니다."));
+	        }
+	        return ResponseEntity.ok(new ApiResponse(200, todo.toString()));
+
+	    } catch (IllegalArgumentException e) {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+	                .body(new ApiResponse(404, e.getMessage()));
+	    }
+	}
+
+	
+	
 
 	private void validateUserExistence(String memberId) {
 	    int count = userMapper.countByMemberId(memberId);

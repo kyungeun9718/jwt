@@ -3,6 +3,16 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.aladin.todo.mapper.TodoMapper">
+	<sql id="todoColumns">
+	    todo_no,
+	    member_no,
+	    todo_title,
+	    todo_content,
+	    CASE WHEN completed = 1 THEN '완료' ELSE '미완료' END AS completedStatus,
+	    inst_dtm,
+	    update_dtm
+	</sql>
+
 	<insert id="insert" parameterType="com.aladin.todo.entity.Todo">
 	    INSERT INTO TB_TODO (
 	        todo_no,
@@ -20,20 +30,22 @@
 	        #{instDtm}
 	    )
 	</insert>
+	
 	<select id="findByMemberNo" resultType="com.aladin.todo.entity.Todo">
-    SELECT
-        todo_no,
-        member_no,
-        todo_title,
-        todo_content,
-        CASE WHEN completed = 1 THEN '완료'
-      	     ELSE '미완료'
-        END AS completed,
-        inst_dtm,
-        update_dtm
-    FROM TB_TODO
-    WHERE member_no = #{memberNo}
-    ORDER BY inst_dtm DESC
-</select>
+	    SELECT
+	        <include refid="todoColumns"/>
+	    FROM TB_TODO
+	    WHERE member_no = #{memberNo}
+	    ORDER BY inst_dtm DESC
+	</select>
+
+	<select id="findByTodoNoAndMemberNo" resultType="com.aladin.todo.entity.Todo">
+	    SELECT
+	        <include refid="todoColumns"/>
+	    FROM TB_TODO
+	    WHERE todo_no = #{todoNo}
+	      AND member_no = #{memberNo}
+	</select>
+
 	
 </mapper>
