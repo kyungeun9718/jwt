@@ -214,7 +214,136 @@
 ### TODO API
 
 <details markdown="1">
-<summary>회원 탈퇴 `DELETE /users/me`</summary>
+<summary>TODO 생성 `POST /todos`</summary>
+
+  #### Headers : `Authorization: Bearer <JWT 토큰>`
+
+ #### Ruquest Body : 
+```json
+{
+  "todoTitle": "string",
+  "todoContent": "string"
+}
+```
+
+<details markdown="1">
+  <summary>Success Response</summary>
+  
+```json
+
+{
+  "status": 201,
+  "message": "TODO가 성공적으로 등록되었습니다."
+}
+
+```
+  </details>
+   <details markdown="1">
+  <summary>Error Response</summary>
+  
+```json
+// 인증 실패
+{
+  "error": "Invalid or missing JWT token"
+}
+
+// 필드 검증 실패
+{
+  "status": 400,
+  "message": "[에러 사유]"
+}
+
+```
+  </details>
+</details>
+
+
+<details markdown="1">
+<summary>TODO 전체 목록 조회 `GET /todos`</summary>
+
+  #### Headers : `Authorization: Bearer <JWT 토큰>`
+
+
+<details markdown="1">
+  <summary>Success Response</summary>
+  
+```json
+
+  {
+    "todoNo": "string",
+    "memberNo": "string",
+    "todoTitle": "string",
+    "todoContent": "string",
+    "completed": 0,
+    "completedStatus": "미완료",
+    "instDtm": "2025-05-14 12:00:00",
+    "updateDtm": null
+  }
+
+
+
+```
+  </details>
+   <details markdown="1">
+  <summary>Error Response</summary>
+  
+```json
+// 인증 실패
+{
+  "error": "Invalid or missing JWT token"
+}
+
+```
+  </details>
+</details>
+
+
+
+<details markdown="1">
+<summary>TODO 수정 `PUT /todos/{id}`</summary>
+
+  #### Headers : `Authorization: Bearer <JWT 토큰>`
+
+ #### Ruquest Body : 
+```json
+{
+  "todoTitle": "string", 
+  "todoContent": "string",
+  "completed": 1
+}
+
+```
+<details markdown="1">
+  <summary>Success Response</summary>
+  
+```json
+
+{
+  "status": 200,
+  "message": "TODO가 성공적으로 수정되었습니다."
+}
+
+
+```
+  </details>
+   <details markdown="1">
+  <summary>Error Response</summary>
+  
+```json
+// 인증 실패
+{"error":"Invalid or missing JWT token"}
+// 필드 검증 실패
+{"status":400,"message":"[에러 사유]"}
+// 존재하지 않는 id
+{"status":404,"message":"TODO를 찾을 수 없습니다."}
+
+```
+  </details>
+</details>
+
+
+<details markdown="1">
+<summary>TODO 삭제 `DELETE /todos/{id}`</summary>
 
   #### Headers : `Authorization: Bearer <JWT 토큰>`
 
@@ -224,21 +353,51 @@
 ```json
 
 {
-"status": 200,
-"message": "회원이 성공적으로 탈퇴되었습니다."
+  "status": 200,
+  "message": "TODO가 성공적으로 삭제되었습니다."
 }
+
+
 ```
   </details>
    <details markdown="1">
   <summary>Error Response</summary>
   
 ```json
+// 인증 실패
+{"error":"Invalid or missing JWT token"}
+// 존재하지 않는 id
+{"status":404,"message":"TODO를 찾을 수 없습니다."}
 
-{
-  "error": "Invalid or missing JWT token"
-}
 
 ```
+  </details>
+</details>
 
+
+<details markdown="1">
+<summary>TODO 검색 `GET /todos/search`</summary>
+
+  #### Headers : `Authorization: Bearer <JWT 토큰>`
+
+<details markdown="1">
+  <summary>Success Response</summary>
+  
+```json
+
+[
+  { /* Todo 객체 배열 구조 */ }
+]
+
+
+```
+  </details>
+   <details markdown="1">
+  <summary>Error Response</summary>
+  
+```json
+{"error":"Invalid or missing JWT token"}
+
+```
   </details>
 </details>
