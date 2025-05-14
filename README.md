@@ -13,6 +13,18 @@
 ### 빌드 & 실행 (Maven 기준)
 - application.properties에서 SQLite 파일 경로 및 JWT 시크릿을 설정합니다.
 
+### 설명
+> 로그인: POST /users/login → username/password 검증 → JwtTokenProvider.createToken() 호출 → JWT 발급
+
+> 인증 필터: 보호된 엔드포인트 호출 시 JwtAuthenticationFilter 작동 → resolveToken() 및 validateToken() → getAuthentication()으로 Authentication 생성 → SecurityContextHolder에 설정
+
+> 요청 처리: 인증이 완료된 상태로 각 컨트롤러 로직 실행
+
+> 예외 처리: 토큰 누락/만료/위변조 시 401 Unauthorized 반환
+
+> SecurityConfig 에서 /users/signup, /users/login 은 permitAll(), 나머지 모든 요청은 JWT 인증이 필요합니다.
+
+
 ---
 <br>
 
