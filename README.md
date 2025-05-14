@@ -23,9 +23,12 @@
 > 예외 처리: 토큰 누락/만료/위변조 시 401 Unauthorized 반환
 
 > SecurityConfig 에서 /users/signup, /users/login 은 permitAll(), 나머지 모든 요청은 JWT 인증이 필요합니다.
+<details markdown="1">
+ <summary>JWT 발급 및 검증 흐름 다이어그램</summary>
+ 
+![Image](https://github.com/user-attachments/assets/8b8139b4-28d9-4e22-8857-85705dd41548)
+</details>
 
-
----
 <br>
 
 
@@ -413,3 +416,5 @@
 ```
   </details>
 </details>
+
+<br>
