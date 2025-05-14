@@ -1,6 +1,7 @@
 # JWT기반 TODO 백엔드 API구현
 
 ---
+<br>
 
 ## 🧑‍💻 실행 방법
 
@@ -13,6 +14,8 @@
 - application.properties에서 SQLite 파일 경로 및 JWT 시크릿을 설정합니다.
 
 ---
+<br>
+
 
 ## 📖 API 명세
 - 각 API는 JSON 형태의 요청과 응답을 주고받으며, Content-Type : application/json 헤더를 설정해야 합니다.
@@ -175,5 +178,67 @@
 
   </details>
 </details>
+
+<details markdown="1">
+<summary>회원 탈퇴 `DELETE /users/me`</summary>
+
+  #### Headers : `Authorization: Bearer <JWT 토큰>`
+
+<details markdown="1">
+  <summary>Success Response</summary>
+  
+```json
+
+{
+"status": 200,
+"message": "회원이 성공적으로 탈퇴되었습니다."
+}
+```
+  </details>
+   <details markdown="1">
+  <summary>Error Response</summary>
+  
+```json
+
+{
+  "error": "Invalid or missing JWT token"
+}
+
+```
+
+  </details>
+</details>
+
 <br>
  
+### TODO API
+
+<details markdown="1">
+<summary>회원 탈퇴 `DELETE /users/me`</summary>
+
+  #### Headers : `Authorization: Bearer <JWT 토큰>`
+
+<details markdown="1">
+  <summary>Success Response</summary>
+  
+```json
+
+{
+"status": 200,
+"message": "회원이 성공적으로 탈퇴되었습니다."
+}
+```
+  </details>
+   <details markdown="1">
+  <summary>Error Response</summary>
+  
+```json
+
+{
+  "error": "Invalid or missing JWT token"
+}
+
+```
+
+  </details>
+</details>
