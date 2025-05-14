@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -174,7 +175,11 @@ public class TodoService {
 	}
 	
 	private String generateTodoNo() {
-	    return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+	    String timestamp = LocalDateTime.now()
+	        .format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+	    int suffix = ThreadLocalRandom.current().nextInt(0, 100_000);
+	    String suffixStr = String.format("%05d", suffix);
+	    return timestamp + suffixStr;
 	}
 
 	private Member getMemberNo(String memberId) {

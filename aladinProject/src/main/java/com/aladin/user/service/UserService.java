@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.aladin.common.dto.ApiResponse;
 import com.aladin.common.config.PasswordEncoderConfig;
@@ -147,7 +148,7 @@ public class UserService {
     public Member findMemberOrThrow(String memberId) {
         Member member = userMapper.findByMemberId(memberId);
         if (member == null) {
-            throw new IllegalArgumentException("존재하지 않는 회원입니다.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"존재하지 않는 회원입니다.");
         }
         return member;
     }
